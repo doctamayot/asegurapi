@@ -1,4 +1,5 @@
 class Api::V1::PinsController < ApplicationController
+  
   before_action :restrict_access
   respond_to :json
 
@@ -21,8 +22,11 @@ class Api::V1::PinsController < ApplicationController
     end
 
     def restrict_access
-  authenticate_or_request_with_http_token do |token, options|
-    @user = User.find_by(token: token)
+     user = User.find_by(email: request.headers['HTTP_X_USER_EMAIL'])
+    access = user ? request.headers['X-API-TOKEN'] == user.api_token : false
+
+    unless access
+      render json: { errors: "Acceso denegado" }, status: 401
   end
 end
 end

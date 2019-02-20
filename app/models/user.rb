@@ -8,6 +8,6 @@ class User < ActiveRecord::Base
 
   private
     def generate_token
-      self.api_token ||= SecureRandom.hex if new_record?
+      self.token ||= SecureRandom.hex if new_record?
     end
 end
